@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripTrack Create Account</title>
+    <!-- Google Fonts import -->
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Lobster+Two&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lufga:wght@300&display=swap" rel="stylesheet">
+    <style>
+        /* CSS styles */
+        
+        /* General body styling */
+        body { 
+            background: #CAD2C5; 
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Error message styling */
+        .error-message {
+            color: #84A98C;
+            font-size: 12px;
+            margin-top: 5px;
+            font-family: Abel;
+        }
+
+        /* Main content wrapper */
+        .content-wrapper {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Mountains container positioning */
+        .mountains-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1;
+        }
+
+        /* Mountains image styling */
+        .mountains-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Input field styling */
+        .input-field {
+            width: 215px; 
+            height: 30px; 
+            background: #E7EFEC; 
+            border-radius: 25px;
+            color: #84A98C;
+            font-size: 15px;
+            font-family: Abel;
+            font-weight: 400;
+            word-wrap: break-word;
+            border: none;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.10) inset;
+            padding-left: 10px;
+        }
+
+        /* Submit button styling */
+        .submit-button {
+            width: 135px;
+            height: 40px;
+            background: #84A98C;
+            border-radius: 25px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+            border: none;
+            color: #E7EFEC;
+            font-size: 18px;
+            font-family: Abel;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        /* Login link styling */
+        .login-link {
+            color: #84A98C;
+            font-size: 11px;
+            font-family: Lufga;
+            font-weight: 300;
+            background: transparent;
+            word-wrap: break-word;
+            text-decoration: none;
+        }
+
+        /* TripTrack title styling */
+        .trip-track {
+            left: 28vw; 
+            top: 23vh; 
+            position: absolute; 
+            color: #2F3E46; 
+            font-size: 50px; 
+            font-family: 'Lobster Two'; 
+            font-weight: 400; 
+            word-wrap: break-word;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <!-- Cloud background image -->
+        <div>
+            <img style="width: 100%; height: auto; left: 0; top: 0; position: absolute" src="{% static 'Clouds.jpg' %}" alt="Clouds" />
+        </div>
+
+        <!-- TripTrack title -->
+        <div class="trip-track">TripTrack</div>
+
+        <!-- Plane image -->
+        <img style="width: 75%; height: auto; left: 13vw; top: 25vh; position: absolute" src="{% static 'Plane.jpg' %}" alt="Plane" />
+        
+        <!-- Mountains background -->
+        <div class="mountains-container">
+            <img class="mountains-image" src="{% static 'Mountains.svg' %}" alt="Mountains" />
+        </div>
+        
+        <!-- Logo image -->
+        <img style="width: calc(1800px+(2400-1800)*((100vw - 500px)/(1920-500))); height: 80px; right: 3vw; bottom: 10px; position: absolute; z-index: 2;" src="{% static 'Logo.svg' %}" alt="Logo" />
+
+        <!-- Create account form -->
+        <form method="POST" style="display: flex; flex-direction: column; align-items: center; position: absolute; top: 40vh; left: 50%; transform: translateX(-50%); gap: 15px; z-index: 2;">
+            <!-- This protects the site form cross site request forgery (CSRF) -->
+            {% csrf_token %}
+            {% for field in form %}
+                <div>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="error-message">
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="submit-button">CREATE ACCOUNT</button>
+        </form>
+
+        <!-- Login link -->
+        <div style="position: absolute; bottom: 23vh; left: 50%; transform: translateX(-50%); z-index: 2;">
+            <a href="{% url 'login' %}" class="login-link">Already have an account? Log in</a>
+        </div>
+    </div>
+</body>
+</html>

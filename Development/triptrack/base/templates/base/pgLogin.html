@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripTrack Login</title>
+    <!-- Google Fonts import -->
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Lobster+Two&family=Lufga:wght@300&display=swap" rel="stylesheet">
+    <style>
+        /* CSS styles */
+        
+        /* General body styling */
+        body { 
+            background: #CAD2C5; 
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Main content wrapper */
+        .content-wrapper {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Mountains container positioning */
+        .mountains-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1;
+        }
+
+        /* Mountains image styling */
+        .mountains-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            z-index: -1;
+        }
+
+        /* Login button text styling */
+        .login {
+            width: 93%; 
+            height: 40px; 
+            position: absolute; 
+            text-align: center;
+            color: #E7EFEC;
+            font-size: 30px;
+            font-family: Abel;
+            font-weight: 400;
+            word-wrap: break-word;
+            z-index: 10;
+        }
+
+        /* Password input field styling */
+        .password {
+            width: 215px; 
+            height: 30px; 
+            position: absolute; 
+            background: #E7EFEC; 
+            border-radius: 25px;
+            color: #84A98C;
+            font-size: 15px;
+            font-family: Abel;
+            font-weight: 400;
+            word-wrap: break-word;
+            border: none;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.10) inset;
+        }
+
+        /* Username input field styling */
+        .username {
+            color: #84A98C;
+            width: 215px; 
+            height: 30px; 
+            position: absolute; 
+            background: #E7EFEC; 
+            border-radius: 25px;
+            font-size: 15px;
+            font-family: Abel;
+            font-weight: 400;
+            word-wrap: break-word;
+            border: none;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.10) inset;
+        }
+
+        /* Create new account link styling */
+        .create-new-account {
+            color: #84A98C;
+            font-size: 11px;
+            font-family: Lufga;
+            font-weight: 300;
+            background: transparent;
+            word-wrap: break-word;
+        }
+
+        .create-new-account a {
+            color: #84A98C;
+            font-size: 11px;
+            font-family: Lufga;
+            font-weight: 300;
+            background: transparent;
+            word-wrap: break-word;
+        }
+
+        /* TripTrack title styling */
+        .trip-track {
+            left: 28vw; 
+            top: 23vh; 
+            position: absolute; 
+            color: #2F3E46; 
+            font-size: 50px; 
+            font-family: Lobster Two; 
+            font-weight: 400; 
+            word-wrap: break-word;
+            z-index: 2;
+        }
+
+        /* Error message styling */
+        .error-message {
+            color: #D9534F;
+            font-size: 14px;
+            font-family: Abel;
+            font-weight: 400;
+            position: absolute;
+            top: 465px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px;
+            border-radius: 5px;
+            width: 80%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <!-- Cloud background image -->
+        <div>
+            <img style="width: 100%; height: auto; left: 0; top: 0; position: absolute" src="{% static 'Clouds.jpg' %}" />
+        </div>
+
+        <!-- TripTrack title -->
+        <div class="trip-track">TripTrack</div>
+
+        <!-- Plane image -->
+        <img style="width: 75%; height: auto; left: 13vw; top: 25vh; position: absolute" src="{% static 'Plane.jpg' %}" />
+        
+        <!-- Mountains background -->
+        <div style="z-index: -1;" class="mountains-container">
+            <img class="mountains-image" src="{% static 'Mountains.svg' %}" alt="Mountains" />
+        </div>
+        
+        <!-- Logo image -->
+        <img style="width: calc(1800px+(2400-1800)*((100vw - 500px)/(1920-500))); height: 80px; right: 3vw; bottom: 10px; position: absolute; z-index: 2;" src="{% static 'Logo.svg' %}" />
+
+        <!-- Login form -->
+        <form action="" method="POST">
+            <!-- This protects the site form cross site request forgery (CSRF) -->
+            {% csrf_token %}
+
+            <!-- Username input -->
+            <div style="width: 215px; left: 50%; transform: translateX(-50%); top: 298px; position: absolute;">
+                <input class="username" id="username" name="username" type="text" placeholder="    Username" />
+            </div>
+
+            <!-- Password input -->
+            <div style="width: 215px; left: 50%; transform: translateX(-50%); top: 353px; position: absolute;">
+                <input class="password" id="password" name="password" type="password" placeholder="    Password"/>
+            </div>
+
+            <!-- Error message display -->
+            {% if messages %}
+                <div class="error-message">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Login button -->
+            <button type="submit" style="width: 135px; height: 40px; left: 50%; transform: translateX(-50%); top: 408px; position: absolute; background: transparent; border:none;">
+                <div class="login">LOGIN</div>
+                <div style="width: 100%; height: 100%; background: #84A98C; border-radius: 25px; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25)"></div>
+            </button>
+        </form>
+
+        <!-- Create new account link -->
+        <button style="width: auto; left: 50%; transform: translateX(-50%); top: 452px; position: absolute; background: transparent; border: none;">
+            <a href="{% url 'createUser' %}" class="create-new-account">Create New Account</a>
+        </button>
+    </div>
+</body>
+</html>
