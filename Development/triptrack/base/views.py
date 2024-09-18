@@ -132,14 +132,12 @@ def createTripTwo(request):
     tripId = request.session.get('strTripName_id')
     
     if not tripId:
-        messages.error(request, "No trip ID found in the session.")
         return redirect('createButton')  # Redirect to an appropriate error page
 
     try:
         dictTranLst = Trip.objects.get(pk=tripId)
 
     except Trip.DoesNotExist:
-        messages.error(request, "The trip you are trying to add legs to does not exist.")
         return redirect('createButton')
 
     legs = TripLeg.objects.filter(dictTripLst=dictTranLst)
@@ -150,14 +148,12 @@ def createTripTwo(request):
 
         # Validate location input
         if not strLoc:
-            messages.error(request, "Please enter a valid location.")
             return redirect('createTripTwo')
 
         # Validate transportation input
         lstTran = [t for t in lstTran if t]  # Filter out empty strings
 
         if not lstTran:
-            messages.error(request, "Please select a transportation option.")
             return redirect('createTripTwo')
 
         strTran = lstTran[0]
@@ -165,7 +161,6 @@ def createTripTwo(request):
         try:
             selTransport = Transport.objects.get(pk=strTran)
         except Transport.DoesNotExist:
-            messages.error(request, "Selected transportation option does not exist.")
             return redirect('createTripTwo')
 
         try:
@@ -178,7 +173,6 @@ def createTripTwo(request):
         newLeg = TripLeg.objects.create(dictTripLst=dictTranLst, strLoc=selLocation, strTran=selTransport)
 
         # Success message and redirect
-        messages.success(request, "Trip leg added successfully.")
         return redirect('createTripTwo')
 
     else:
@@ -367,16 +361,14 @@ def luggageWeight(request):
         try:
             intLuggageWeight = int(intLuggageWeight) if intLuggageWeight else 0
         except ValueError:
-            messages.error(request, "Please enter a valid numeric value for luggage weight.")
-            return redirect('some_trip_page')
+            return redirect('createButton')
 
         # Determine which trip to retrieve based on the active page
         active_page = request.session.get("active_page", 1)
         trip_query = Trip.objects.filter(user=request.user).order_by('-intStartDate')
         
         if not trip_query.exists():
-            messages.error(request, "No trips found.")
-            return redirect('some_trip_page')
+            return redirect('createButton')
 
         if active_page == 1:
             dictTripLst = trip_query.first()
@@ -384,8 +376,7 @@ def luggageWeight(request):
             try:
                 dictTripLst = trip_query[active_page - 1]
             except IndexError:
-                messages.error(request, "Invalid page selection.")
-                return redirect('some_trip_page')
+                return redirect('createButton')
 
         # Store the trip ID in the session
         request.session['strTripName_id'] = dictTripLst.pk
@@ -402,7 +393,6 @@ def luggageWeight(request):
             suggestLuggageWeight = response.json()
         except requests.exceptions.RequestException as e:
             suggestLuggageWeight = 'Error'
-            messages.error(request, "Failed to retrieve luggage weight suggestions from the API.")
 
         # Simplify the rendering logic using a page map
         page_map = {
